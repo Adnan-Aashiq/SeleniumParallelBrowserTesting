@@ -1,5 +1,7 @@
 package utils;
 
+import java.time.Duration;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -18,15 +20,15 @@ public class BaseClass {
     public void setUp(String browser) {
         switch (browser.toLowerCase()) {
             case "chrome":
-                WebDriverManager.chromedriver().setup();
+                WebDriverManager.chromedriver().driverVersion("latest").setup();
                 driver = new ChromeDriver();
                 break;
             case "firefox":
-                WebDriverManager.firefoxdriver().setup();
+                WebDriverManager.firefoxdriver().driverVersion("latest").setup();
                 driver = new FirefoxDriver();
                 break;
             case "edge":
-                WebDriverManager.edgedriver().setup();
+                WebDriverManager.edgedriver().driverVersion("latest").setup();
                 driver = new EdgeDriver();
                 break;
             case "safari":
@@ -35,8 +37,9 @@ public class BaseClass {
             default:
                 throw new IllegalArgumentException("Invalid browser: " + browser);
         }
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
         driver.manage().window().maximize();
-        driver.get("https://www.pos.com.my/send/ratecalculator"); // Replace with your specified URL
+        driver.get("https://ultimateqa.com/automation"); // Replace with your specified URL
     }
 
     @AfterMethod

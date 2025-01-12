@@ -2,11 +2,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>POS</groupId>
-	<artifactId>POS</artifactId>
+	<groupId>SeerSolutionAssessment</groupId>
+	<artifactId>SeerSolutionAssessment</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>POS1</name>
-	<description>POS</description>
+	<name>Seer Solution Assessment</name>
+	<description>Seer Solution Assessment Testing</description>
 
 	<dependencies>
 		<!--
@@ -62,7 +62,7 @@
 					<suiteXmlFiles>
 						<suiteXmlFile>testng.xml</suiteXmlFile>
 					</suiteXmlFiles>
-					<parallel>methods</parallel>
+					<parallel>tests</parallel>
 					<threadCount>4</threadCount>
 				</configuration>
 			</plugin>

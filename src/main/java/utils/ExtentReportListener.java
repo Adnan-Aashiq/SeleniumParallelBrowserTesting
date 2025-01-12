@@ -8,8 +8,8 @@ import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 
 public class ExtentReportListener implements ITestListener {
-    public static ExtentReports extent;
-    public static ExtentTest test;
+    private static ThreadLocal<ExtentTest> threadLocalTest = new ThreadLocal<>();
+    private ExtentReports extent;
 
     @Override
     public void onStart(ITestContext context) {
@@ -22,33 +22,30 @@ public class ExtentReportListener implements ITestListener {
     public void onTestStart(ITestResult result) {
         String testName = result.getMethod().getMethodName();
         String browser = result.getTestContext().getCurrentXmlTest().getParameter("browser");
-        
-        System.out.println("Initializing ExtentTest for: " + testName + " on " + browser);
-        test = extent.createTest(testName + " [" + browser + "]");
-        test.assignCategory(browser); // Assign the browser as a category for filtering
+
+        ExtentTest test = extent.createTest(testName + " [" + browser + "]");
+        test.assignCategory(browser);
+
+        threadLocalTest.set(test); // Set test instance per thread
+    }
+
+    public static ExtentTest getTest() {
+        return threadLocalTest.get();
     }
 
     @Override
     public void onTestSuccess(ITestResult result) {
-        if (test != null) {
-            test.pass("Test Passed");
-        }
+        getTest().pass("Test Passed");
     }
 
     @Override
     public void onTestFailure(ITestResult result) {
-        if (test != null) {
-            test.fail(result.getThrowable());
-        }
+        getTest().fail(result.getThrowable());
     }
 
     @Override
     public void onTestSkipped(ITestResult result) {
-        if (test != null) {
-            test.skip("Test Skipped");
-        } else {
-            System.out.println("ExtentTest object is null. Unable to log skip status.");
-        }
+        getTest().skip("Test Skipped");
     }
 
     @Override
@@ -60,6 +57,7 @@ public class ExtentReportListener implements ITestListener {
 
     @Override
     public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
-        // No specific implementation needed for now
+        // Optionally, log or handle this case in ExtentReports
+        getTest().warning("Test failed but is within success percentage: " + result.getName());
     }
 }
